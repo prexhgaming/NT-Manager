@@ -1,0 +1,98 @@
+name: Build Release APK
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      BUILD_LOG: build.log
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: .github/requirements.txt
+
+      - name: Install Python requirements
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r .github/requirements.txt
+          python -c "import aiogram; print('aiogram', aiogram.__version__)"
+
+      - name: Decode keystore and create signing properties
+        env:
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.SIGNING_KEYSTORE_BASE64 }}
+          RELEASE_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+        run: |
+          mkdir -p keystore
+          echo "$RELEASE_KEYSTORE_BASE64" | base64 -d > keystore/release.jks
+          echo "storeFile=keystore/release.jks" > keystore.properties
+          echo "storePassword=$RELEASE_STORE_PASSWORD" >> keystore.properties
+          echo "keyAlias=$RELEASE_KEY_ALIAS" >> keystore.properties
+          echo "keyPassword=$RELEASE_KEY_PASSWORD" >> keystore.properties
+          echo "Keystore and properties created:"
+          ls -la keystore/
+          cat keystore.properties
+
+      - name: Notify Telegram that the build started
+        run: python .github/scripts/telegram.py start
+
+      - name: Build release APK
+        id: gradle_build
+        shell: bash
+        run: |
+          set -o pipefail
+          chmod +x ./gradlew
+          ./gradlew assembleRelease --no-daemon 2>&1 | tee "$BUILD_LOG"
+
+      - name: Update Telegram build status
+        if: success()
+        run: python .github/scripts/telegram.py built
+
+      - name: Upload APK to Telegram
+        if: success()
+        shell: bash
+        run: |
+          APK_PATH="$(find app/build/outputs/apk -type f -name '*.apk' -print -quit)"
+          if [[ -z "$APK_PATH" ]]; then
+            echo "No APK was produced"
+            exit 1
+          fi
+          python .github/scripts/telegram.py upload --apk "$APK_PATH"
+
+      - name: Notify Telegram about build failure
+        if: failure()
+        run: python .github/scripts/telegram.py failure --log "$BUILD_LOG"
+
+      - name: Upload build log artifact
+        if: always() && hashFiles('build.log') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
+          if-no-files-found: ignore
