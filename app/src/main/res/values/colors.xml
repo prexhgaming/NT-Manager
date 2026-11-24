@@ -2,8 +2,34 @@
 <resources>
     <color name="brand_primary">#1F6FEB</color>
     <color name="brand_primary_dark">#0B4FCB</color>
-    <color name="screen_background">#F6F8FB</color>
+
+    <!-- App bar (dark, like the reference design) -->
+    <color name="app_bar_background">#2B2B2B</color>
+    <color name="app_bar_title">#FFFFFF</color>
+    <color name="app_bar_subtitle">#B9BEC6</color>
+
+    <!-- Panes -->
+    <color name="screen_background">#FFFFFF</color>
+    <color name="pane_active_background">#FFFFFF</color>
+    <color name="pane_inactive_background">#FAFAFA</color>
+    <color name="divider_color">#E0E0E0</color>
+
+    <!-- Text -->
     <color name="text_primary">#101828</color>
-    <color name="text_secondary">#5B6472</color>
+    <color name="text_secondary">#6B7280</color>
+
+    <!-- Icons -->
+    <color name="icon_tint">#00000000</color>
+    <color name="folder_tile">#2F2F2F</color>
+    <color name="file_tile">#8A5A3B</color>
+    <color name="icon_on_tile">#FFFFFF</color>
+
+    <!-- Bottom actions -->
+    <color name="bottom_nav_background">#FFFFFF</color>
+    <color name="bottom_nav_icon">#5B6472</color>
+    <color name="bottom_nav_icon_active">#1F6FEB</color>
+
+    <color name="row_ripple">#1A000000</color>
+
     <color name="ic_launcher_background">#0B1220</color>
 </resources>

@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NT Manager</string>
-    <string name="welcome_message">Fresh Gradle project skeleton. Replace this screen with the real UI.</string>
-    <string name="action_tap">Tap me</string>
-    <string name="counter_value">%1$d taps</string>
-    <string name="tap_message">Tap #%1$d</string>
+
+    <!-- App bar -->
+    <string name="cd_navigation">Navigation</string>
+    <string name="loading">Loading…</string>
+    <!-- Folders: 12  File: 1  Disk: 44.28G/109.38G -->
+    <string name="panel_summary">Folders: %1$d  File: %2$d  Disk: %3$s</string>
+
+    <!-- Panel content -->
+    <string name="parent_directory">..</string>
+    <string name="empty_folder">Empty folder</string>
+
+    <!-- New folder dialog -->
+    <string name="new_folder_title">New folder</string>
+    <string name="new_folder_hint">Folder name</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="folder_created">Created %1$s</string>
+    <string name="folder_create_failed">Could not create %1$s</string>
+    <string name="folder_exists">%1$s already exists</string>
+    <string name="invalid_name">Invalid name</string>
+
+    <!-- Storage access -->
+    <string name="storage_access_required">Grant all-files access to browse internal storage</string>
+    <string name="grant_access">Grant access</string>
+    <string name="not_available">Not available</string>
 </resources>

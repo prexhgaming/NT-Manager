@@ -28,3 +28,4 @@ captures/
 
 # Assistant workspace metadata
 .polydev/
+.base

@@ -1,0 +1,17 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+
+    <path
+        android:fillColor="@color/file_tile"
+        android:pathData="M7,2h12l8,8v20a2,2 0 0 1 -2,2H7a2,2 0 0 1 -2,-2V4a2,2 0 0 1 2,-2z" />
+    <path
+        android:fillColor="@color/icon_on_tile"
+        android:fillAlpha="0.4"
+        android:pathData="M19,2l8,8h-8z" />
+    <path
+        android:fillColor="@color/icon_on_tile"
+        android:pathData="M9,17h14v1.8H9zM9,21h14v1.8H9zM9,25h9v1.8H9z" />
+</vector>
